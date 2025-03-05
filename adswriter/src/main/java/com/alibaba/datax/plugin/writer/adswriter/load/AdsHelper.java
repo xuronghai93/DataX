@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.alibaba.datax.plugin.writer.adswriter.load;
 
@@ -78,7 +78,7 @@ public class AdsHelper {
 
     /**
      * Obtain the table meta information.
-     * 
+     *
      * @param table The table
      * @return The table meta information
      * @throws com.alibaba.datax.plugin.writer.adswriter.AdsException
@@ -112,7 +112,7 @@ public class AdsHelper {
         Statement statement = null;
         ResultSet rs = null;
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
             String url = AdsUtil.prepareJdbcUrl(this.adsURL, this.schema, this.socketTimeout, this.suffix);
 
             Properties connectionProps = new Properties();
@@ -144,7 +144,7 @@ public class AdsHelper {
             tableInfo.setTableSchema(schema);
             tableInfo.setTableName(table);
             DBUtil.closeDBResources(rs, statement, null);
-            
+
             String tableMetaSql = String.format("select update_type, partition_type, partition_column, partition_count, primary_key_columns from information_schema.tables where table_schema = `'%s'` and table_name = `'%s'`", schema.toLowerCase(), table.toLowerCase());
             LOG.info(String.format("检查表信息sql语句:%s", tableMetaSql));
             statement = connection.createStatement();
@@ -202,7 +202,7 @@ public class AdsHelper {
 
     /**
      * Submit LOAD DATA command.
-     * 
+     *
      * @param table The target ADS table
      * @param partition The partition option in the form of "(partition_name,...)"
      * @param sourcePath The source path
@@ -265,7 +265,7 @@ public class AdsHelper {
         Statement statement = null;
         ResultSet rs = null;
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
             String url = AdsUtil.prepareJdbcUrl(this.adsURL, this.schema, this.socketTimeout, this.suffix);
             Properties connectionProps = new Properties();
             connectionProps.put("user", userName);
@@ -322,7 +322,7 @@ public class AdsHelper {
 
     /**
      * Check the load data job status.
-     * 
+     *
      * @param jobId The job id to
      * @return true if load data job succeeded, false if load data job failed.
      * @throws AdsException
@@ -362,13 +362,13 @@ public class AdsHelper {
             }
         } catch (Exception e) {
             throw new AdsException(AdsException.OTHER, e.getMessage(), e);
-        } 
+        }
     }
-    
+
     private String checkLoadDataJobStatusWithRetry(final String jobId)
             throws AdsException {
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
             final String finalAdsUrl = this.adsURL;
             final String finalSchema = this.schema;
             final Long finalSocketTimeout = this.socketTimeout;
@@ -380,7 +380,7 @@ public class AdsHelper {
                     Statement statement = null;
                     ResultSet rs = null;
                     try {
-                        
+
                         String url = AdsUtil.prepareJdbcUrl(finalAdsUrl, finalSchema, finalSocketTimeout, suffix);
                         Properties connectionProps = new Properties();
                         connectionProps.put("user", userName);
